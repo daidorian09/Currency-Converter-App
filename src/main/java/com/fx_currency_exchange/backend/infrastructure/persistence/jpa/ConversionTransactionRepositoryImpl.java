@@ -12,20 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Repository
 @RequiredArgsConstructor
 public class ConversionTransactionRepositoryImpl implements ConversionTransactionRepository {
 
     private final JpaConversionTransactionRepository jpaRepository;
-
-    @Override
-    public Optional<ConversionTransaction> findById(UUID id) {
-        return jpaRepository.findById(id)
-                .map(ConversionTransactionMapper::toDomain);
-    }
 
     @Override
     public Page<ConversionTransaction> findByFilter(final ConversationTransactionFilter filter, final Pageable pageable) {
