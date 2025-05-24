@@ -15,6 +15,5 @@ public record CurrencyConversionRequest(
 
         @Schema(description = "Amount to convert", example = "100.50")
         BigDecimal amount
-
 ) {
 }

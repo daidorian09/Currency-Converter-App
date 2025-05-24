@@ -1,6 +1,6 @@
 package com.fx_currency_exchange.backend.domain.entity;
 
-import com.fx_currency_exchange.backend.infrastructure.util.CurrencyValidator;
+import com.fx_currency_exchange.backend.infrastructure.util.CurrencyValidatorUtil;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -26,8 +26,8 @@ public class ConversionTransaction {
                                  final BigDecimal amount,
                                  final BigDecimal convertedAmount,
                                  final LocalDateTime timestamp) {
-        CurrencyValidator.validateCurrencyCode(fromCurrency);
-        CurrencyValidator.validateCurrencyCode(toCurrency);
+        CurrencyValidatorUtil.validateCurrencyCode(fromCurrency);
+        CurrencyValidatorUtil.validateCurrencyCode(toCurrency);
         this.id = Optional.ofNullable(id).orElse(UUID.randomUUID());
         this.fromCurrency = fromCurrency.toUpperCase();
         this.toCurrency = toCurrency.toUpperCase();

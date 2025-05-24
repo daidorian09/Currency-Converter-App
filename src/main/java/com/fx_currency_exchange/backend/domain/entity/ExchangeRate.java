@@ -1,6 +1,6 @@
 package com.fx_currency_exchange.backend.domain.entity;
 
-import com.fx_currency_exchange.backend.infrastructure.util.CurrencyValidator;
+import com.fx_currency_exchange.backend.infrastructure.util.CurrencyValidatorUtil;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,8 +17,8 @@ public class ExchangeRate {
 
     @Builder
     public ExchangeRate(final UUID id, final String fromCurrency, final String toCurrency, final BigDecimal rate) {
-        CurrencyValidator.validateCurrencyCode(fromCurrency);
-        CurrencyValidator.validateCurrencyCode(toCurrency);
+        CurrencyValidatorUtil.validateCurrencyCode(fromCurrency);
+        CurrencyValidatorUtil.validateCurrencyCode(toCurrency);
         this.id = Optional.ofNullable(id).orElse(UUID.randomUUID());
         this.fromCurrency = fromCurrency.toUpperCase();
         this.toCurrency = toCurrency.toUpperCase();
