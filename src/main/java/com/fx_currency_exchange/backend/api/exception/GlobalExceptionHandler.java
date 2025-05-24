@@ -1,6 +1,7 @@
 package com.fx_currency_exchange.backend.api.exception;
 
 import com.fx_currency_exchange.backend.domain.exception.BaseFxCurrencyExchangeException;
+import com.fx_currency_exchange.backend.domain.exception.ExchangeRateNotFound;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,21 @@ public class GlobalExceptionHandler {
                 ex.getClass().getSimpleName(),
                 ex.getMessage(),
                 HttpStatus.BAD_REQUEST
+        ));
+    }
+
+    @ExceptionHandler(ExchangeRateNotFound.class)
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> handleExchangeRateNotFoundException(final ExchangeRateNotFound ex) {
+        log.warn("ExchangeRateNotFoundException occurred: {} - {}",
+                ex.getClass().getSimpleName(),
+                ex.getMessage(),
+                ex);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(buildBody(
+                ex.getClass().getSimpleName(),
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND
         ));
     }
 

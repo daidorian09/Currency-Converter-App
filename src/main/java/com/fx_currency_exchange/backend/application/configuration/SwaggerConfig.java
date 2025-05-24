@@ -30,7 +30,7 @@ public class SwaggerConfig {
     public GroupedOpenApi apiControllers() {
         return GroupedOpenApi.builder()
                 .group("controllers")
-                .pathsToMatch("/api/orders/**", "/api/assets/**", "/api/authentication/**", "/api/customers/**")
+                .pathsToMatch("/api/currency/**")
                 .build();
     }
 }
