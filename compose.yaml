@@ -1,1 +1,26 @@
+version: '3.8'
+
 services:
+  app:
+    build: .
+    container_name: fx-currency-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - fx-network
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: fx-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - fx-network
+
+networks:
+  fx-network:
+    driver: bridge

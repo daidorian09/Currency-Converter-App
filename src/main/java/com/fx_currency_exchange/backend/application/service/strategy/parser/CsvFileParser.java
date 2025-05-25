@@ -20,7 +20,7 @@ import static com.fx_currency_exchange.backend.application.constant.ApplicationC
 
 @Component
 @Slf4j
-public non-sealed class FileParser extends AbstractFileParser implements FileParserStrategy {
+public non-sealed class CsvFileParser extends AbstractFileParser implements FileParserStrategy {
 
     private static final int HEADER_ROW = 1;
     private static final int START_INCLUSIVE = 0;

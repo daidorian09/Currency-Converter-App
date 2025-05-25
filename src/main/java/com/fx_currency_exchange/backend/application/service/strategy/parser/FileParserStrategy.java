@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-public sealed interface FileParserStrategy permits FileParser {
+public sealed interface FileParserStrategy permits CsvFileParser {
 
     boolean supports(final String extension);
 
