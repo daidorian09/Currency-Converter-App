@@ -11,16 +11,13 @@ import com.fx_currency_exchange.backend.application.service.ExchangeRateService;
 import com.fx_currency_exchange.backend.domain.entity.ConversionTransaction;
 import com.fx_currency_exchange.backend.domain.entity.ExchangeRate;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/currency")
@@ -33,6 +30,10 @@ public class CurrencyController {
     @Operation(
             summary = "Get exchange rate between two currencies",
             description = "Returns the exchange rate for the given source and target currency codes.",
+            parameters = {
+                    @Parameter(name = "fromCurrency", description = "Source currency code in 3-letter format (e.g., USD)", example = "USD"),
+                    @Parameter(name = "toCurrency", description = "Target currency code in 3-letter format (e.g., EUR)", example = "EUR")
+            },
             responses = {
                     @ApiResponse(responseCode = "200", description = "Exchange rate found",
                             content = @Content(schema = @Schema(implementation = ExchangeRateResponse.class))),
@@ -41,9 +42,10 @@ public class CurrencyController {
     )
     @GetMapping("/rate")
     public ResponseEntity<ExchangeRateResponse> getExchangeRate(
-            @RequestBody final ExchangeRateRequest request
+            @RequestParam final String fromCurrency,
+            @RequestParam final String toCurrency
     ) {
-        final ExchangeRate exchangeRate = exchangeRateService.getExchangeRate(request);
+        final ExchangeRate exchangeRate = exchangeRateService.getExchangeRate(new ExchangeRateRequest(fromCurrency, toCurrency));
         return ResponseEntity.ok(ExchangeRateResponseMapper.from(exchangeRate));
     }
 
