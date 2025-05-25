@@ -5,6 +5,7 @@ import com.fx_currency_exchange.backend.domain.enums.FileType;
 import com.fx_currency_exchange.backend.domain.exception.CsvParsingException;
 import com.fx_currency_exchange.backend.domain.exception.InvalidCSVFormatException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 import static com.fx_currency_exchange.backend.application.constant.ApplicationConstant.CSV_FILE_DELIMITER;
@@ -34,7 +34,7 @@ public non-sealed class FileParser extends AbstractFileParser implements FilePar
     public List<String[]> parse(final MultipartFile file) {
         validateFileNotEmpty(file);
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+        try (final BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
             return reader.lines()
                     .skip(HEADER_ROW)
                     .map(this::parseLine)
@@ -48,7 +48,7 @@ public non-sealed class FileParser extends AbstractFileParser implements FilePar
     private String[] parseLine(final String line) {
         final String[] parts = line.split(CSV_FILE_DELIMITER);
 
-        if (!Objects.equals(parts.length, ApplicationConstant.EXPECTED_CSV_COLUMN_COUNT)) {
+        if (ObjectUtils.notEqual(parts.length, ApplicationConstant.EXPECTED_CSV_COLUMN_COUNT)) {
             throw new InvalidCSVFormatException(parts.length, line);
         }
 

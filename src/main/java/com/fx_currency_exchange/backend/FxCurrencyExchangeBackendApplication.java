@@ -2,12 +2,14 @@ package com.fx_currency_exchange.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@EnableScheduling
 public class FxCurrencyExchangeBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(FxCurrencyExchangeBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(FxCurrencyExchangeBackendApplication.class, args);
+    }
 
 }
