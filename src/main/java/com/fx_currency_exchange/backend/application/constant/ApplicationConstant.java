@@ -27,4 +27,5 @@ public class ApplicationConstant {
     public static final String CSV_UPLOAD_LOCK_KEY_PREFIX = "csv-upload-lock:";
     public static final int CSV_UPLOAD_LOCK_WAIT_TIME = 20;
     public static final int CSV_UPLOAD_LOCK_LEASE_TIME = 120;
+    public static final String EXCHANGE_RATE_CACHE_NAME = "exchangeRates";
 }

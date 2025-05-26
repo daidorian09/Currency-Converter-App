@@ -1,8 +1,8 @@
 package com.fx_currency_exchange.backend.application.service.impl;
 
 import com.fx_currency_exchange.backend.application.dto.request.CurrencyConversionRequest;
-import com.fx_currency_exchange.backend.application.dto.response.CsvUploadResponse;
-import com.fx_currency_exchange.backend.application.service.CsvConversionUploadService;
+import com.fx_currency_exchange.backend.application.dto.response.FileUploadConversionResponse;
+import com.fx_currency_exchange.backend.application.service.FileUploadConversionService;
 import com.fx_currency_exchange.backend.application.service.CurrencyConversionService;
 import com.fx_currency_exchange.backend.application.service.strategy.parser.FileParserFactory;
 import com.fx_currency_exchange.backend.application.service.strategy.parser.FileParserStrategy;
@@ -26,14 +26,14 @@ import static com.fx_currency_exchange.backend.application.constant.ApplicationC
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CsvConversionUploadServiceImpl implements CsvConversionUploadService {
+public class FileUploadConversionConversionServiceImpl implements FileUploadConversionService {
 
     private final FileParserFactory fileParserFactory;
     private final CurrencyConversionService conversionService;
     private final RedissonClient redissonClient;
 
     @Override
-    public CsvUploadResponse process(final MultipartFile file) {
+    public FileUploadConversionResponse process(final MultipartFile file) {
         final String lockKey = "%s%s".formatted(CSV_UPLOAD_LOCK_KEY_PREFIX, FileExtensionUtil.extractNormalizedFilename(file));
         final RLock lock = redissonClient.getLock(lockKey);
         boolean acquired = false;
@@ -56,7 +56,7 @@ public class CsvConversionUploadServiceImpl implements CsvConversionUploadServic
         }
     }
 
-    private CsvUploadResponse processFile(final MultipartFile file) {
+    private FileUploadConversionResponse processFile(final MultipartFile file) {
         log.info("Starting CSV upload processing for file: {}", file.getOriginalFilename());
 
         final FileParserStrategy parser = fileParserFactory.getParser(file);
@@ -82,6 +82,6 @@ public class CsvConversionUploadServiceImpl implements CsvConversionUploadServic
 
         log.info("CSV upload processing completed for file: {}. Success: {}, Failure: {}", file.getOriginalFilename(), success, failure);
 
-        return new CsvUploadResponse(success, failure);
+        return new FileUploadConversionResponse(success, failure);
     }
 }

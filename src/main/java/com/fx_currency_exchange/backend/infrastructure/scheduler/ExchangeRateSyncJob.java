@@ -1,8 +1,9 @@
 package com.fx_currency_exchange.backend.infrastructure.scheduler;
 
 import com.fx_currency_exchange.backend.application.configuration.ExchangeRateJobConfig;
+import com.fx_currency_exchange.backend.application.dto.request.CreateExchangeRateRequest;
+import com.fx_currency_exchange.backend.application.service.ExchangeRateService;
 import com.fx_currency_exchange.backend.domain.entity.ExchangeRate;
-import com.fx_currency_exchange.backend.domain.service.ExchangeRateRepository;
 import com.fx_currency_exchange.backend.infrastructure.external.ExchangeRateClient;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ import java.util.concurrent.ScheduledFuture;
 public class ExchangeRateSyncJob {
 
     private final ExchangeRateClient exchangeRateClient;
-    private final ExchangeRateRepository exchangeRateRepository;
     private final ExchangeRateJobConfig exchangeRateJobConfig;
+    private final ExchangeRateService exchangeRateService;
 
     private final TaskScheduler taskScheduler;
     private ScheduledFuture<?> scheduledTask;
@@ -49,12 +50,8 @@ public class ExchangeRateSyncJob {
             final String to = pair[1];
             try {
                 final BigDecimal rate = exchangeRateClient.getRate(from, to);
-                final ExchangeRate exchangeRate = ExchangeRate.builder()
-                        .fromCurrency(from)
-                        .toCurrency(to)
-                        .rate(rate)
-                        .build();
-                exchangeRateRepository.save(exchangeRate);
+                final ExchangeRate exchangeRate = exchangeRateService.createExchangeRate(new CreateExchangeRateRequest(from, to, rate));
+                exchangeRateService.updateCacheableExchangeRate(exchangeRate);
                 log.info("[ExchangeRateSyncJob] Updated: {} -> {} = {}", from, to, rate);
             } catch (Exception e) {
                 log.warn("[ExchangeRateSyncJob] Failed to update rate for {} -> {}", from, to, e);

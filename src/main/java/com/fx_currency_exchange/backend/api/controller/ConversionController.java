@@ -3,10 +3,10 @@ package com.fx_currency_exchange.backend.api.controller;
 import com.fx_currency_exchange.backend.application.constant.ApplicationConstant;
 import com.fx_currency_exchange.backend.application.dto.filter.ConversationTransactionFilter;
 import com.fx_currency_exchange.backend.application.dto.response.ConversionHistoryResponse;
-import com.fx_currency_exchange.backend.application.dto.response.CsvUploadResponse;
+import com.fx_currency_exchange.backend.application.dto.response.FileUploadConversionResponse;
 import com.fx_currency_exchange.backend.application.mapper.ConversionHistoryResponseMapper;
 import com.fx_currency_exchange.backend.application.service.ConversionHistoryService;
-import com.fx_currency_exchange.backend.application.service.CsvConversionUploadService;
+import com.fx_currency_exchange.backend.application.service.FileUploadConversionService;
 import com.fx_currency_exchange.backend.domain.entity.ConversionTransaction;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,7 +39,7 @@ import java.util.UUID;
 public class ConversionController {
 
     private final ConversionHistoryService conversionHistoryService;
-    private final CsvConversionUploadService csvConversionUploadService;
+    private final FileUploadConversionService fileUploadConversionService;
 
     @Operation(
             summary = "Retrieve conversion transaction history",
@@ -79,7 +79,7 @@ public class ConversionController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "CSV file processed successfully",
-                            content = @Content(schema = @Schema(implementation = CsvUploadResponse.class))
+                            content = @Content(schema = @Schema(implementation = FileUploadConversionResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "400",
@@ -88,9 +88,9 @@ public class ConversionController {
             }
     )
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<CsvUploadResponse> uploadCsv(
+    public ResponseEntity<FileUploadConversionResponse> uploadCsv(
             @RequestPart("file") MultipartFile file
     ) {
-        return ResponseEntity.ok(csvConversionUploadService.process(file));
+        return ResponseEntity.ok(fileUploadConversionService.process(file));
     }
 }
