@@ -1,6 +1,7 @@
 package com.fx_currency_exchange.backend.infrastructure.external.fixer;
 
 import com.fx_currency_exchange.backend.application.configuration.FixerConfig;
+import com.fx_currency_exchange.backend.domain.exception.FixerRateUnavailableException;
 import com.fx_currency_exchange.backend.infrastructure.external.ExchangeRateClient;
 import com.fx_currency_exchange.backend.infrastructure.external.dto.response.FixerResponse;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class FixerClientImpl implements ExchangeRateClient {
 
     private static BigDecimal extractCrossRate(String fromCurrency, String toCurrency, FixerResponse response) {
         if (Objects.isNull(response) || !response.success()) {
-            throw new RuntimeException("Failed to fetch exchange rates from Fixer.");
+            throw new FixerRateUnavailableException();
         }
 
         final Map<String, BigDecimal> rates = response.rates();
@@ -50,7 +51,7 @@ public class FixerClientImpl implements ExchangeRateClient {
         final BigDecimal toRate = rates.get(toCurrency);
 
         if (Objects.isNull(fromRate) || Objects.isNull(toRate)) {
-            throw new RuntimeException("Missing currency rates in Fixer response for " + fromCurrency + " or " + toCurrency);
+            throw new FixerRateUnavailableException(fromCurrency, toCurrency);
         }
 
         return toRate.divide(fromRate, SCALE, RoundingMode.HALF_UP);
