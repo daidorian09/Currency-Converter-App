@@ -15,7 +15,6 @@ import static com.fx_currency_exchange.backend.application.constant.ApplicationC
 @Configuration
 @ConfigurationProperties(prefix = "exchange.job")
 public class ExchangeRateJobConfig {
-
     private List<String[]> currencyPairs = new ArrayList<>();
     private String cron = EXCHANGE_SYNC_JOB_CRON_EXPRESSION;
 }

@@ -5,10 +5,12 @@ import com.fx_currency_exchange.backend.application.service.CurrencyConversionSe
 import com.fx_currency_exchange.backend.domain.entity.ConversionTransaction;
 import com.fx_currency_exchange.backend.domain.entity.ExchangeRate;
 import com.fx_currency_exchange.backend.domain.exception.ExchangeRateNotFound;
+import com.fx_currency_exchange.backend.domain.exception.SameCurrencyConversionException;
 import com.fx_currency_exchange.backend.domain.service.ConversionTransactionRepository;
 import com.fx_currency_exchange.backend.domain.service.ExchangeRateRepository;
 import com.fx_currency_exchange.backend.infrastructure.util.CurrencyValidatorUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,5 +42,9 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
         CurrencyValidatorUtil.validateCurrencyCode(request.fromCurrency());
         CurrencyValidatorUtil.validateCurrencyCode(request.toCurrency());
         CurrencyValidatorUtil.validateAmount(request.amount());
+
+        if (StringUtils.equalsIgnoreCase(request.fromCurrency(), request.toCurrency())) {
+            throw new SameCurrencyConversionException(request.fromCurrency());
+        }
     }
 }

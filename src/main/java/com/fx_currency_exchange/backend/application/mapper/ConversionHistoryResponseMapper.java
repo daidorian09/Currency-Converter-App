@@ -15,5 +15,4 @@ public class ConversionHistoryResponseMapper {
                 tx.getTimestamp()
         );
     }
-
 }
