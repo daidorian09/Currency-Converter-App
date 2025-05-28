@@ -31,7 +31,7 @@ class ExchangeRateTest {
     }
 
     @Test
-    void shouldAutoGenerateIdIfNotProvided() {
+    void shouldAutoGenerateIdAndTimestampIfNotProvided() {
         final ExchangeRate exchangeRate = ExchangeRate.builder()
                 .fromCurrency("GBP")
                 .toCurrency("TRY")
@@ -42,6 +42,8 @@ class ExchangeRateTest {
         assertThat(exchangeRate.getFromCurrency()).isEqualTo("GBP");
         assertThat(exchangeRate.getToCurrency()).isEqualTo("TRY");
         assertThat(exchangeRate.getRate()).isEqualTo(BigDecimal.valueOf(35.4));
+        assertThat(exchangeRate.getTimestamp()).isNotNull();
+
     }
 
     @Test

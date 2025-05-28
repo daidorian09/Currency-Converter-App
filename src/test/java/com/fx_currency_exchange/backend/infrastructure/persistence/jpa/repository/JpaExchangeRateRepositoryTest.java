@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,12 +24,13 @@ class JpaExchangeRateRepositoryTest {
         repository.saveAll(
                 java.util.List.of(
                         stub("EUR", 0.93),
-                        stub("GBP", 0.79)
+                        stub("GBP", 0.79),
+                        stub("EUR", 1.35)
                 )
         );
 
         Optional<ExchangeRateEntity> usdEur =
-                repository.findByFromCurrencyAndToCurrency("USD", "EUR");
+                repository.findTopByFromCurrencyAndToCurrencyOrderByTimestampDesc("USD", "EUR");
 
         assertThat(usdEur)
                 .isPresent()
@@ -36,7 +38,7 @@ class JpaExchangeRateRepositoryTest {
                 .satisfies(e -> {
                     assertThat(e.getFromCurrency()).isEqualTo("USD");
                     assertThat(e.getToCurrency()).isEqualTo("EUR");
-                    assertThat(e.getRate()).isEqualByComparingTo("0.93");
+                    assertThat(e.getRate()).isEqualByComparingTo("1.35");
                 });
     }
 
@@ -45,7 +47,7 @@ class JpaExchangeRateRepositoryTest {
         repository.save(stub("CHF", 0.89));
 
         assertThat(
-                repository.findByFromCurrencyAndToCurrency("EUR", "USD")
+                repository.findTopByFromCurrencyAndToCurrencyOrderByTimestampDesc("EUR", "USD")
         ).isNotPresent();
     }
 
@@ -55,6 +57,7 @@ class JpaExchangeRateRepositoryTest {
                 .fromCurrency("USD")
                 .toCurrency(to)
                 .rate(BigDecimal.valueOf(rate))
+                .timestamp(LocalDateTime.now())
                 .build();
     }
 }

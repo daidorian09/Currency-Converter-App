@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -29,4 +30,6 @@ public class ExchangeRateEntity {
     private String toCurrency;
 
     private BigDecimal rate;
+
+    private LocalDateTime timestamp;
 }

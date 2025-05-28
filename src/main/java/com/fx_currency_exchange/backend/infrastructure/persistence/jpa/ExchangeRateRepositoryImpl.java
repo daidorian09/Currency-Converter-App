@@ -18,7 +18,7 @@ public class ExchangeRateRepositoryImpl implements ExchangeRateRepository {
 
     @Override
     public Optional<ExchangeRate> findByCurrencyPair(final String from, final String to) {
-        return jpaRepository.findByFromCurrencyAndToCurrency(from, to)
+        return jpaRepository.findTopByFromCurrencyAndToCurrencyOrderByTimestampDesc(from, to)
                 .map(ExchangeRateMapper::toDomain);
     }
 

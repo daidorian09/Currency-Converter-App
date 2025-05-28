@@ -5,6 +5,7 @@ import com.fx_currency_exchange.backend.infrastructure.persistence.jpa.entity.Ex
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,11 +15,13 @@ class ExchangeRateMapperTest {
     @Test
     void shouldMapModelToEntityCorrectly() {
         final UUID id = UUID.randomUUID();
+        final LocalDateTime timestamp = LocalDateTime.now();
         final ExchangeRate model = ExchangeRate.builder()
                 .id(id)
                 .fromCurrency("USD")
                 .toCurrency("EUR")
                 .rate(new BigDecimal("0.85"))
+                .timestamp(timestamp)
                 .build();
 
         final ExchangeRateEntity entity = ExchangeRateMapper.toEntity(model);
@@ -28,6 +31,7 @@ class ExchangeRateMapperTest {
         assertEquals("USD", entity.getFromCurrency());
         assertEquals("EUR", entity.getToCurrency());
         assertEquals(new BigDecimal("0.85"), entity.getRate());
+        assertEquals(timestamp, entity.getTimestamp());
     }
 
     @Test

@@ -15,7 +15,6 @@ class ConversionTransactionMapperTest {
 
     @Test
     void shouldMapModelToEntityCorrectly() {
-        // Arrange
         final UUID id = UUID.randomUUID();
         final LocalDateTime timestamp = LocalDateTime.now();
         final ConversionTransaction model = ConversionTransaction.builder()

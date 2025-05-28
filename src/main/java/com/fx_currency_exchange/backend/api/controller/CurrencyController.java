@@ -10,6 +10,8 @@ import com.fx_currency_exchange.backend.application.service.CurrencyConversionSe
 import com.fx_currency_exchange.backend.application.service.ExchangeRateService;
 import com.fx_currency_exchange.backend.domain.entity.ConversionTransaction;
 import com.fx_currency_exchange.backend.domain.entity.ExchangeRate;
+import com.fx_currency_exchange.backend.domain.exception.ExchangeRateNotFound;
+import com.fx_currency_exchange.backend.domain.exception.InvalidCurrencyCodeException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,7 +19,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/currency")
@@ -37,7 +44,8 @@ public class CurrencyController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Exchange rate found",
                             content = @Content(schema = @Schema(implementation = ExchangeRateResponse.class))),
-                    @ApiResponse(responseCode = "404", description = "Exchange rate not found")
+                    @ApiResponse(responseCode = "404", description = "Exchange rate not found",
+                            content = @Content(schema = @Schema(implementation = ExchangeRateNotFound.class)))
             }
     )
     @GetMapping("/rate")
@@ -55,7 +63,8 @@ public class CurrencyController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Conversion successful",
                             content = @Content(schema = @Schema(implementation = CurrencyConversionResponse.class))),
-                    @ApiResponse(responseCode = "400", description = "Invalid request")
+                    @ApiResponse(responseCode = "400", description = "Invalid request",
+                            content = @Content(schema = @Schema(implementation = InvalidCurrencyCodeException.class)))
             }
     )
     @PostMapping("/convert")

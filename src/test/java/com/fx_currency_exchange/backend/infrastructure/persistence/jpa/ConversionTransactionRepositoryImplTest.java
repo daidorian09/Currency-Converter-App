@@ -50,10 +50,8 @@ class ConversionTransactionRepositoryImplTest {
 
         when(jpaRepository.findAll((Specification<ConversionTransactionEntity>) any(), eq(pageable))).thenReturn(entityPage);
 
-        // Act
         final Page<ConversionTransaction> result = repository.findByFilter(new ConversationTransactionFilter(null, null, null), pageable);
 
-        // Assert
         assertEquals(1, result.getTotalElements());
         assertEquals("USD", result.getContent().get(0).getFromCurrency());
     }

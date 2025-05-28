@@ -11,6 +11,7 @@ public class ExchangeRateMapper {
                 .fromCurrency(model.getFromCurrency())
                 .toCurrency(model.getToCurrency())
                 .rate(model.getRate())
+                .timestamp(model.getTimestamp())
                 .build();
     }
 

@@ -7,5 +7,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface JpaExchangeRateRepository extends JpaRepository<ExchangeRateEntity, UUID> {
-    Optional<ExchangeRateEntity> findByFromCurrencyAndToCurrency(final String from, final String to);
+    Optional<ExchangeRateEntity> findTopByFromCurrencyAndToCurrencyOrderByTimestampDesc(final String from, final String to);
 }

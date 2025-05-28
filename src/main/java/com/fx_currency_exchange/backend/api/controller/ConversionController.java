@@ -8,6 +8,7 @@ import com.fx_currency_exchange.backend.application.mapper.ConversionHistoryResp
 import com.fx_currency_exchange.backend.application.service.ConversionHistoryService;
 import com.fx_currency_exchange.backend.application.service.FileUploadConversionService;
 import com.fx_currency_exchange.backend.domain.entity.ConversionTransaction;
+import com.fx_currency_exchange.backend.domain.exception.InvalidUploadedFilenameException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -83,7 +84,8 @@ public class ConversionController {
                     ),
                     @ApiResponse(
                             responseCode = "400",
-                            description = "Invalid file or format"
+                            description = "Invalid file or format",
+                            content = @Content(schema = @Schema(implementation = InvalidUploadedFilenameException.class))
                     )
             }
     )
